@@ -163,7 +163,7 @@ public class LibrarySystem {
                 switch (e.getMessage()) {
                     // Runs if the item could not be found
                     case "No Item":
-                        System.out.println("Could not find itme for barcode "
+                        System.out.println("Could not find item for barcode "
                                 + itemBarcode);
                         break;
                     // Runs if the user could not be found
@@ -243,33 +243,139 @@ public class LibrarySystem {
     }
 
     // Gets the item from the items array
-    private static Item getItem(String barcode) {
-        return items[0];
+    private static Item getItem(String barcode) throws Exception {
+        // Runs for each item in items
+        for (Item item : items) {
+            // Returns the item if it has the provided barcode
+            if (item.getBarcode().equals(barcode)) {
+                return item;
+            }
+        }
+        // Throws exception if no item is returned
+        throw new Exception("No Item");
     }
 
     // Gets the user from the users array
-    private static User getUser(String userID) {
-        return users[0];
+    private static User getUser(String userID) throws Exception {
+        // Runs for each user in users
+        for (User user : users) {
+            // Returns user if it has the provided id
+            if (user.getUserID().equals(userID)) {
+                return user;
+            }
+        }
+        // Throws exception if no user is returned
+        throw new Exception("No User");
     }
 
     // Gets the loan from the loans array
-    private static Loan getLoan(String barcode) {
-        return loans[0];
+    private static Loan getLoan(String barcode) throws Exception {
+        // Runs for each loan in loans
+        for (Loan loan : loans) {
+            // Returns the loan if the item barcode is the provided barcode
+            // TODO loan .getBarcode method when coded
+            if (loan.getUserID().equals(barcode)) {
+                return loan;
+            }
+        }
+        // Throws exception if no loan is returned
+        throw new Exception("No Loan");
     }
 
     // Checks if the loan is in the loans array
     private static boolean hasLoan(String barcode) {
+        // Runs for each loan in loans
+        for (Loan loan : loans) {
+            // Returns true if the item barcode is the provided barcode
+            // TODO loan .getBarcode method when coded
+            if (loan.getUserID().equals(barcode)) {
+                return true;
+            }
+        }
+        // Returns false if no loan is found
         return false;
     }
 
     // Removes the loan from the loans array
-    private static void removeLoan(String barcode) {
+    private static void removeLoan(String barcode) throws Exception {
+        // Creates a new loans array with 1 less element than loans
+        Loan[] newLoans = new Loan[loans.length - 1];
+        // Declares the variable to store the index for newLoans
+        int newLoansIndex = 0;
 
+        // Runs for each loan in loans
+        for (int i = 0; i < loans.length; i++) {
+            // Runs if the loan item's barcode is the provided barcode
+            // TODO loan .getBarcode method when coded
+            if (loans[i].getUserID().equals(barcode)) {
+                // Runs for each loan in loans
+                for (int j = 0; j < loans.length; j++) {
+                    // Runs if j is not the index of the removed loan (i)
+                    if (j != i) {
+                        // Stores the loan in the new loans array
+                        newLoans[newLoansIndex++] = loans[j];
+                    }
+                }
+
+                // Stores the new loans array in loans
+                loans = newLoans;
+                // Exits the method
+                return;
+            }
+        }
+        // Throws exception if no loan is found
+        throw new Exception("No Loan");
     }
 
     // Creates and adds a new loan object to the loans array
     private static void issueItem() {
+        // Declares the local variables
+        String itemBarcode = "", userID = "";
+        Item item;
+        User user;
 
+        // Trys to get the information
+        try {
+            // Gets the item's barcode
+            itemBarcode = input.nextLine();
+            // Runs if the item is already loaned
+            if (hasLoan(itemBarcode)) {
+                // Tells the user the loan is skipped
+                System.out.println("Item " + itemBarcode
+                        + " is already on loan");
+                // Exits the method
+                return;
+            }
+            // Gets the item
+            item = getItem(itemBarcode);
+
+            // Gets the user's ID
+            userID = input.nextLine();
+            // Gets the user
+            user = getUser(userID);
+
+            // Creates a loan from the line and adds it to the loans array
+            appendToArray(new Loan(itemBarcode, userID, "",
+                    "", 0));
+        } // Handles exceptions
+        catch (Exception e) {
+            switch (e.getMessage()) {
+                // Runs if the item could not be found
+                case "No Item":
+                    System.out.println("Could not find item for barcode "
+                            + itemBarcode);
+                    break;
+                // Runs if the user could not be found
+                case "No User":
+                    System.out.println("Could not find user for id "
+                            + userID);
+                    break;
+                // Runs for any other exception
+                default:
+                    System.out.println("Encountered error while issuing item");
+                    break;
+            }
+        }
     }
 
     // Gets and renews a loan
