@@ -13,9 +13,9 @@ public class Loan {
  private String user ;
  private String issueDate ;
  private String dueDate ;
- private String numberOfRenewals ;
+ private int numberOfRenewals ;
  
-  public Loan(String newItem, String newUser, String newIssueDate, String newDueDate, String newNumberOfRenewals){
+  public Loan(String newItem, String newUser, String newIssueDate, String newDueDate, int newNumberOfRenewals){
       item = newItem;
       user = newUser;
       issueDate = newIssueDate;
