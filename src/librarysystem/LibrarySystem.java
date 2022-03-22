@@ -67,7 +67,7 @@ public class LibrarySystem {
         // Opens the file scanner to the path
         fileScan = new Scanner(new File(path));
         // Sets the seperation character
-        fileScan.useDelimiter("[,\n]");
+        fileScan.useDelimiter("[,\n\r]");
         // Goes to the next line
         fileScan.nextLine();
     }
@@ -79,9 +79,9 @@ public class LibrarySystem {
 
         // Loops through each line in the file
         while (fileScan.hasNextLine()) {
-            // Outputs the info read
-            System.out.println(fileScan.next() + "," + fileScan.next() + ","
-                    + fileScan.next() + "," + fileScan.next());
+            // Creates a user from the line and adds it to the users array
+            appendToArray(new User(fileScan.next(), fileScan.next(),
+                    fileScan.next(), fileScan.next()));
 
             // Goes to the next line
             fileScan.nextLine();
@@ -103,10 +103,10 @@ public class LibrarySystem {
 
         // Loops through each line in the file
         while (fileScan.hasNextLine()) {
-            // Outputs the info read
-            System.out.println(fileScan.next() + "," + fileScan.next() + ","
-                    + fileScan.next() + "," + fileScan.next() + ","
-                    + fileScan.next() + "," + fileScan.next());
+            // Creates an item from the line and adds it to the items array
+            appendToArray(new Item(fileScan.next(), fileScan.next(),
+                    fileScan.next(), fileScan.next(), fileScan.next(),
+                    fileScan.next()));
 
             // Goes to the next line
             fileScan.nextLine();
@@ -137,29 +137,45 @@ public class LibrarySystem {
             try {
                 // Gets the item's barcode
                 itemBarcode = fileScan.next();
+                // Runs if the item is already loaned
+                if (hasLoan(itemBarcode)) {
+                    // Tells the user the loan is skipped
+                    System.out.println("Skipping duplicate loan of item "
+                            + itemBarcode);
+                    // Goes to the next line
+                    fileScan.nextLine();
+                    // Goes to the next iteration
+                    continue;
+                }
                 // Gets the item
-                //item = getItem(itemBarcode);
+                item = getItem(itemBarcode);
 
                 // Gets the user's ID
                 userID = fileScan.next();
                 // Gets the user
-                //user = getUser(userID);
+                user = getUser(userID);
 
-                System.out.println(itemBarcode + "," + userID + ","
-                        + fileScan.next() + "," + fileScan.next() + ","
-                        + fileScan.next());
+                // Creates a loan from the line and adds it to the loans array
+                appendToArray(new Loan(itemBarcode, userID, fileScan.next(),
+                        fileScan.next(), fileScan.nextInt()));
             } // Handles exceptions
             catch (Exception e) {
-                // Runs if the item could not be found
-                if (e.getMessage() == "No Item") {
-                    System.out.println("Could not find itme for barcode "
-                            + itemBarcode);
-                } // Runs if the user could not be found
-                else if (e.getMessage() == "No User") {
-                    System.out.println("Could not find user for id " + userID);
-                } // Runs for any other exception
-                else {
-                    System.out.println("Encountered error while reading item");
+                switch (e.getMessage()) {
+                    // Runs if the item could not be found
+                    case "No Item":
+                        System.out.println("Could not find itme for barcode "
+                                + itemBarcode);
+                        break;
+                    // Runs if the user could not be found
+                    case "No User":
+                        System.out.println("Could not find user for id "
+                                + userID);
+                        break;
+                    // Runs for any other exception
+                    default:
+                        System.out.println("Encountered error while reading "
+                                + "item");
+                        break;
                 }
             }
 
@@ -186,13 +202,13 @@ public class LibrarySystem {
             // Tells the user
             System.out.println("Could not find users file");
             // Ends to program
-            //System.exit(1);
+            System.exit(1);
         } // Runs for any other exception
         catch (Exception e) {
             // Tells the user
             System.out.println("No users found in file");
             // Ends to program
-            //System.exit(1);
+            System.exit(1);
         }
 
         // Trys to get all the stored items
@@ -203,13 +219,13 @@ public class LibrarySystem {
             // Tells the user
             System.out.println("Could not find items file");
             // Ends to program
-            //System.exit(2);
+            System.exit(2);
         } // Runs for any other exception
         catch (Exception e) {
             // Tells the user
             System.out.println("No items found in file");
             // Ends to program
-            //System.exit(2);
+            System.exit(2);
         }
 
         // Trys to get all the stored loans
