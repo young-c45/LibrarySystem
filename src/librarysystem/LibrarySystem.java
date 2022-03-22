@@ -6,8 +6,10 @@
  */
 package librarysystem;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class LibrarySystem {
@@ -31,17 +33,32 @@ public class LibrarySystem {
 
     // Adds a new User to the users array
     private static void appendToArray(User newUser) {
-
+        // Clones users into a new array of 1 element larger size
+        User[] newUsers = Arrays.copyOf(users, users.length + 1);
+        // Adds the new user to the end of the new array
+        newUsers[users.length] = newUser;
+        // Sets users to the new users array
+        users = newUsers;
     }
 
     // Adds a new Item to the items array
     private static void appendToArray(Item newItem) {
-
+        // Clones items into a new array of 1 element larger size
+        Item[] newItems = Arrays.copyOf(items, items.length + 1);
+        // Adds the new item to the end of the new array
+        newItems[items.length] = newItem;
+        // Sets items to the new items array
+        items = newItems;
     }
 
     // Adds a new Loan to the loans array
     private static void appendToArray(Loan newLoan) {
-
+        // Clones loans into a new array of 1 element larger size
+        Loan[] newLoans = Arrays.copyOf(loans, loans.length + 1);
+        // Adds the new loan to the end of the new array
+        newLoans[loans.length] = newLoan;
+        // Sets loans to the new loans array
+        loans = newLoans;
     }
 
     // Opens the file scanner to the provide path
@@ -143,7 +160,7 @@ public class LibrarySystem {
 
     // Runs when the class is compiled
     public static void main(String[] args) {
-        // TODO code application logic here
+
     }
 
 }
