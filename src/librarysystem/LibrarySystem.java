@@ -64,27 +64,166 @@ public class LibrarySystem {
     // Opens the file scanner to the provide path
     private static void setReadingFile(String path)
             throws FileNotFoundException {
-
+        // Opens the file scanner to the path
+        fileScan = new Scanner(new File(path));
+        // Sets the seperation character
+        fileScan.useDelimiter("[,\n]");
+        // Goes to the next line
+        fileScan.nextLine();
     }
 
     // Adds all the users in file to the users array
-    private static void readUsers() throws FileNotFoundException {
+    private static void readUsers() throws FileNotFoundException, Exception {
+        // Opens the users file to read
+        setReadingFile(usersFilePath);
 
+        // Loops through each line in the file
+        while (fileScan.hasNextLine()) {
+            // Outputs the info read
+            System.out.println(fileScan.next() + "," + fileScan.next() + ","
+                    + fileScan.next() + "," + fileScan.next());
+
+            // Goes to the next line
+            fileScan.nextLine();
+        }
+
+        // Closes the file
+        fileScan.close();
+
+        // Throws exception if array is still empty
+        if (users.length < 1) {
+            throw new Exception("No Users");
+        }
     }
 
     // Adds all the items in file to the items array
-    private static void readItems() throws FileNotFoundException {
+    private static void readItems() throws FileNotFoundException, Exception {
+        // Opens the items file to read
+        setReadingFile(itemsFilePath);
 
+        // Loops through each line in the file
+        while (fileScan.hasNextLine()) {
+            // Outputs the info read
+            System.out.println(fileScan.next() + "," + fileScan.next() + ","
+                    + fileScan.next() + "," + fileScan.next() + ","
+                    + fileScan.next() + "," + fileScan.next());
+
+            // Goes to the next line
+            fileScan.nextLine();
+        }
+
+        // Closes the file
+        fileScan.close();
+
+        // Throws exception if array is still empty
+        if (items.length < 1) {
+            throw new Exception("No Items");
+        }
     }
 
     // Adds all the loans in file to the loans array
-    private static void readLoans() throws FileNotFoundException {
+    private static void readLoans() throws FileNotFoundException, Exception {
+        // Declares the local variables
+        String itemBarcode = "", userID = "";
+        Item item;
+        User user;
 
+        // Opens the items file to read
+        setReadingFile(loansFilePath);
+
+        // Loops through each line in the file
+        while (fileScan.hasNextLine()) {
+            // Trys to get the information
+            try {
+                // Gets the item's barcode
+                itemBarcode = fileScan.next();
+                // Gets the item
+                //item = getItem(itemBarcode);
+
+                // Gets the user's ID
+                userID = fileScan.next();
+                // Gets the user
+                //user = getUser(userID);
+
+                System.out.println(itemBarcode + "," + userID + ","
+                        + fileScan.next() + "," + fileScan.next() + ","
+                        + fileScan.next());
+            } // Handles exceptions
+            catch (Exception e) {
+                // Runs if the item could not be found
+                if (e.getMessage() == "No Item") {
+                    System.out.println("Could not find itme for barcode "
+                            + itemBarcode);
+                } // Runs if the user could not be found
+                else if (e.getMessage() == "No User") {
+                    System.out.println("Could not find user for id " + userID);
+                } // Runs for any other exception
+                else {
+                    System.out.println("Encountered error while reading item");
+                }
+            }
+
+            // Goes to the next line
+            fileScan.nextLine();
+        }
+
+        // Closes the file
+        fileScan.close();
+
+        // Throws exception if array is still empty
+        if (loans.length < 1) {
+            throw new Exception("No Loans");
+        }
     }
 
     // Stores all the information in the files in the arrays
     private static void readFiles() {
+        // Trys to get all the stored users
+        try {
+            readUsers();
+        } // Runs if no file was found
+        catch (FileNotFoundException e) {
+            // Tells the user
+            System.out.println("Could not find users file");
+            // Ends to program
+            //System.exit(1);
+        } // Runs for any other exception
+        catch (Exception e) {
+            // Tells the user
+            System.out.println("No users found in file");
+            // Ends to program
+            //System.exit(1);
+        }
 
+        // Trys to get all the stored items
+        try {
+            readItems();
+        } // Runs if no file was found
+        catch (FileNotFoundException e) {
+            // Tells the user
+            System.out.println("Could not find items file");
+            // Ends to program
+            //System.exit(2);
+        } // Runs for any other exception
+        catch (Exception e) {
+            // Tells the user
+            System.out.println("No items found in file");
+            // Ends to program
+            //System.exit(2);
+        }
+
+        // Trys to get all the stored loans
+        try {
+            readLoans();
+        } // Runs if no file was found
+        catch (FileNotFoundException e) {
+            // Tells the user
+            System.out.println("Could not find loans file");
+        } // Runs for any other exception
+        catch (Exception e) {
+            // Tells the user
+            System.out.println("No loans found in file");
+        }
     }
 
     // Gets the item from the items array
@@ -160,7 +299,8 @@ public class LibrarySystem {
 
     // Runs when the class is compiled
     public static void main(String[] args) {
-
+        // Reads in the files
+        readFiles();
     }
 
 }
