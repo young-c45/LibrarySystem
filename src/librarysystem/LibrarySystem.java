@@ -355,8 +355,8 @@ public class LibrarySystem {
             user = getUser(userID);
 
             // Creates a loan from the line and adds it to the loans array
-            appendToArray(new Loan(itemBarcode, userID, "",
-                    "", 0));
+            // TODO change to only passing barcode and id when created
+            appendToArray(new Loan(itemBarcode, userID, "", "", 0));
         } // Handles exceptions
         catch (Exception e) {
             switch (e.getMessage()) {
