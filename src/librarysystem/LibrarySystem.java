@@ -442,12 +442,25 @@ public class LibrarySystem {
 
     // Displays info about all the loans
     private static void viewLoans() {
-
+        // Tells the user how many loans are on file
+        System.out.println("There are " + loans.length + " loans on file:");
+        // Runs for each loan
+        for (Loan loan : loans) {
+            // Displays info about the loan
+            // TODO change to displayInfo() when method is implemented
+            loan.displayItem();
+        }
     }
 
     // Displays info about all the items
     private static void viewItems() {
-
+        // Tells the user how many items are on file
+        System.out.println("There are " + items.length + " items on file:");
+        // Runs for each item
+        for (Item item : items) {
+            // Displays info about the item
+            item.displayItem();
+        }
     }
 
     // Runs the method for the function the user wants to run
