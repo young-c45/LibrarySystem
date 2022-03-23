@@ -380,12 +380,64 @@ public class LibrarySystem {
 
     // Gets and renews a loan
     private static void renewItem() {
+        // Declares the local variables
+        String itemBarcode = "";
+        Loan loan;
 
+        // Trys to get and renew the item
+        try {
+            // Gets the item's barcode
+            itemBarcode = input.nextLine();
+            // Gets the loan for the barcode
+            loan = getLoan(itemBarcode);
+
+            // Renews the loan
+            // TODO uncomment when renew() method is implemented
+            //loan.renew();
+            // Tells the user the loan was updated
+            System.out.println("Successfully updated loan:");
+            // Outputs updated information about the loan
+            // TODO change to displayInfo() when method is implemented
+            loan.displayItem();
+        } // Handles exceptions
+        catch (Exception e) {
+            switch (e.getMessage()) {
+                // Runs if the item cannot be found
+                case "No Item":
+                    System.out.println("Could not find item for barcode "
+                            + itemBarcode);
+                    break;
+                // Runs if the item cannot be renewed more
+                case "Max Renewals Reached":
+                    System.out.println("This loan has already been renewed the "
+                            + "maximum number of times, so cannot be renewed "
+                            + "again");
+                // Runs for any other exception
+                default:
+                    System.out.println("Encountered error while renewing item");
+                    break;
+            }
+        }
     }
 
     // Gets and removes a loan from the loans array
     private static void returnItem() {
+        // Declares the local variables
+        String itemBarcode = "";
 
+        // Trys to get and return the item
+        try {
+            // Gets the loan item's barcode
+            itemBarcode = input.nextLine();
+            // Removes the loan from the items array
+            removeLoan(itemBarcode);
+            // Tells the user the loan was removed
+            System.out.println("Successfully returned item " + itemBarcode);
+        } // Handles exceptions
+        catch (Exception e) {
+            // Tells the user the loan couldn't be found
+            System.out.println("Could not find loan for item " + itemBarcode);
+        }
     }
 
     // Displays info about all the loans
