@@ -8,6 +8,7 @@ package librarysystem;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.Scanner;
@@ -30,6 +31,7 @@ public class LibrarySystem {
     private static String usersFilePath = "USERS.csv";
     private static String itemsFilePath = "ITEMS.csv";
     private static String loansFilePath = "LOANS.csv";
+    private static String loansBackupPath = "LOANS_BACKUP.csv";
 
     // Adds a new User to the users array
     private static void appendToArray(User newUser) {
@@ -590,19 +592,69 @@ public class LibrarySystem {
     }
 
     // Opens the file to write to, creating it if it doesn't exist
-    private static void openWriter(String path, boolean create)
-            throws SecurityException {
-
+    private static void openWriter(String path)
+            throws SecurityException, IOException {
+        // Opens the file at path
+        File outputFile = new File(path);
+        // Creates the file if it doesn't exist
+        outputFile.createNewFile();
+        // Opens the writer to the file
+        writer = new PrintWriter(outputFile);
     }
 
     // Writes all the loans to the opened file
     private static void storeLoans() {
-
+        // Writers the field descriptions to the file
+        writer.println("Barcode,User_id,Issue_Date,Due_Date,numRenews");
+        // Runs for each loan in the loans array
+        for (Loan loan : loans) {
+            // Writes the loan info to the file
+            writer.println(loan);
+        }
     }
 
     // Opens a file and writes all the loans out to the file
-    private static void writeLoans() {
+    private static void writeLoans(String path) {
+        // Sets the backup path
+        String backupPath = System.getProperty("user.home")
+                + System.currentTimeMillis() + loansBackupPath;
 
+        // Trys to open and write to the loans file
+        try {
+            // Open the writer to the loans file
+            openWriter(path);
+            // Writes the loans to the file
+            storeLoans();
+            // Closes the writer
+            writer.close();
+        } // Catches I/O error
+        catch (IOException e) {
+            // Tells the user there was an error
+            System.out.println("There was an error in opening " + path
+                    + ", saving to backup file.");
+            // Trys to wait 1 second for the error to pass
+            try {
+                Thread.sleep(1000);
+            } // Handles interupts
+            catch (InterruptedException ex) {
+                // Tells the user the sleep was interrupted
+                System.out.println("Continuing...");
+            } finally {
+                // Saves loans to backup file
+                writeLoans(backupPath);
+                // Tells the user the path of the backup file
+                System.out.println("Backup saved to '" + backupPath + "'.\n");
+            }
+        } // Catches denied wright access
+        catch (SecurityException e) {
+            // Tells the user there was an error
+            System.out.println("Wright access denied to " + path
+                    + ", saving to backup file.\n");
+            // Saves loans to backup file
+            writeLoans(backupPath);
+            // Tells the user the path of the backup file
+            System.out.println("Backup saved to '" + backupPath + "'.\n");
+        }
     }
 
     // Runs when the class is compiled
@@ -618,6 +670,10 @@ public class LibrarySystem {
             // Runs runOperation and stores the returned value
             running = runOperation();
         } while (running);
+
+        // Saves the loans array to a file
+        // TODO remove "../" when finished testing
+        writeLoans("../" + loansFilePath);
 
         // Tells the user the program is exiting
         System.out.println("Thank you for using the Library System, "
