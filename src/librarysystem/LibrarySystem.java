@@ -141,7 +141,7 @@ public class LibrarySystem {
                 if (hasLoan(itemBarcode)) {
                     // Tells the user the loan is skipped
                     System.out.println("Skipping duplicate loan of item "
-                            + itemBarcode);
+                            + itemBarcode + ".");
                     // Goes to the next line
                     fileScan.nextLine();
                     // Goes to the next iteration
@@ -156,6 +156,7 @@ public class LibrarySystem {
                 user = getUser(userID);
 
                 // Creates a loan from the line and adds it to the loans array
+                // TODO change to using item and user when constructor is fixed
                 appendToArray(new Loan(itemBarcode, userID, fileScan.next(),
                         fileScan.next(), fileScan.nextInt()));
             } // Handles exceptions
@@ -164,17 +165,17 @@ public class LibrarySystem {
                     // Runs if the item could not be found
                     case "No Item":
                         System.out.println("Could not find item for barcode "
-                                + itemBarcode);
+                                + itemBarcode + ".");
                         break;
                     // Runs if the user could not be found
                     case "No User":
                         System.out.println("Could not find user for id "
-                                + userID);
+                                + userID + ".");
                         break;
                     // Runs for any other exception
                     default:
                         System.out.println("Encountered error while reading "
-                                + "item");
+                                + "item.");
                         break;
                 }
             }
@@ -200,13 +201,15 @@ public class LibrarySystem {
         } // Runs if no file was found
         catch (FileNotFoundException e) {
             // Tells the user
-            System.out.println("Could not find users file");
+            System.out.println("ERROR - Could not find users file, "
+                    + "ending program.");
             // Ends to program
             System.exit(1);
         } // Runs for any other exception
         catch (Exception e) {
             // Tells the user
-            System.out.println("No users found in file");
+            System.out.println("ERROR - No users found in file, "
+                    + "ending program.");
             // Ends to program
             System.exit(1);
         }
@@ -217,13 +220,15 @@ public class LibrarySystem {
         } // Runs if no file was found
         catch (FileNotFoundException e) {
             // Tells the user
-            System.out.println("Could not find items file");
+            System.out.println("ERROR - Could not find items file, "
+                    + "ending program");
             // Ends to program
             System.exit(2);
         } // Runs for any other exception
         catch (Exception e) {
             // Tells the user
-            System.out.println("No items found in file");
+            System.out.println("ERROR - No items found in file, "
+                    + "ending program.");
             // Ends to program
             System.exit(2);
         }
@@ -234,11 +239,11 @@ public class LibrarySystem {
         } // Runs if no file was found
         catch (FileNotFoundException e) {
             // Tells the user
-            System.out.println("Could not find loans file");
+            System.out.println("Could not find loans file.");
         } // Runs for any other exception
         catch (Exception e) {
             // Tells the user
-            System.out.println("No loans found in file");
+            System.out.println("No loans found in file.");
         }
     }
 
@@ -319,6 +324,11 @@ public class LibrarySystem {
 
                 // Stores the new loans array in loans
                 loans = newLoans;
+
+                // Tells the user the loan was removed
+                System.out.println("Successfully returned item "
+                        + barcode + ".");
+
                 // Exits the method
                 return;
             }
@@ -333,46 +343,62 @@ public class LibrarySystem {
         String itemBarcode = "", userID = "";
         Item item;
         User user;
+        Loan loan;
 
         // Trys to get the information
         try {
+            // Asks the user to input the loaned item's barcode
+            System.out.println("Please enter the barcode of the item to be "
+                    + "loaned...");
             // Gets the item's barcode
             itemBarcode = input.nextLine();
             // Runs if the item is already loaned
             if (hasLoan(itemBarcode)) {
                 // Tells the user the loan is skipped
                 System.out.println("Item " + itemBarcode
-                        + " is already on loan");
+                        + " is already on loan.");
                 // Exits the method
                 return;
             }
             // Gets the item
             item = getItem(itemBarcode);
 
+            // Asks the user to input the id of the person borrowing the item
+            System.out.println("Please enter the ID of the person borrowing "
+                    + "the item...");
             // Gets the user's ID
             userID = input.nextLine();
             // Gets the user
             user = getUser(userID);
 
-            // Creates a loan from the line and adds it to the loans array
-            // TODO change to only passing barcode and id when created
-            appendToArray(new Loan(itemBarcode, userID, "", "", 0));
+            // Creates the loan from the inputs
+            // TODO change to only passing item and user when constructor is
+            //      implemented
+            loan = new Loan(itemBarcode, userID, "", "", 0);
+            // Adds the loan to the loans array
+            appendToArray(loan);
+
+            // Tells the user the loan was issued
+            System.out.println("Successfully issued loan:");
+            // Outputs the information of the new loan
+            // TODO change to displayInfo method when implemented
+            loan.displayItem();
         } // Handles exceptions
         catch (Exception e) {
             switch (e.getMessage()) {
                 // Runs if the item could not be found
                 case "No Item":
                     System.out.println("Could not find item for barcode "
-                            + itemBarcode);
+                            + itemBarcode + ".");
                     break;
                 // Runs if the user could not be found
                 case "No User":
                     System.out.println("Could not find user for id "
-                            + userID);
+                            + userID + ".");
                     break;
                 // Runs for any other exception
                 default:
-                    System.out.println("Encountered error while issuing item");
+                    System.out.println("Encountered error while issuing loan.");
                     break;
             }
         }
@@ -386,6 +412,9 @@ public class LibrarySystem {
 
         // Trys to get and renew the item
         try {
+            // Asks the user to input the loaned item's barcode
+            System.out.println("Please enter the barcode of the item "
+                    + "associated with the loan to be renewed...");
             // Gets the item's barcode
             itemBarcode = input.nextLine();
             // Gets the loan for the barcode
@@ -395,7 +424,7 @@ public class LibrarySystem {
             // TODO uncomment when renew() method is implemented
             //loan.renew();
             // Tells the user the loan was updated
-            System.out.println("Successfully updated loan:");
+            System.out.println("Successfully renewed loan:");
             // Outputs updated information about the loan
             // TODO change to displayInfo() when method is implemented
             loan.displayItem();
@@ -404,17 +433,18 @@ public class LibrarySystem {
             switch (e.getMessage()) {
                 // Runs if the loan cannot be found
                 case "No Loan":
-                    System.out.println("Could not find loan for barcode "
-                            + itemBarcode);
+                    System.out.println("Item " + itemBarcode
+                            + " is not on loan.");
                     break;
                 // Runs if the item cannot be renewed more
                 case "Max Renewals Reached":
                     System.out.println("This loan has already been renewed the "
                             + "maximum number of times, so cannot be renewed "
-                            + "again");
+                            + "again.");
                 // Runs for any other exception
                 default:
-                    System.out.println("Encountered error while renewing item");
+                    System.out.println("Encountered error while "
+                            + "renewing loan.");
                     break;
             }
         }
@@ -427,6 +457,9 @@ public class LibrarySystem {
 
         // Trys to get and return the item
         try {
+            // Asks the user to input the loaned item's barcode
+            System.out.println("Please enter the barcode of the item "
+                    + "to be returned...");
             // Gets the loan item's barcode
             itemBarcode = input.nextLine();
             // Removes the loan from the items array
@@ -436,19 +469,36 @@ public class LibrarySystem {
         } // Handles exceptions
         catch (Exception e) {
             // Tells the user the loan couldn't be found
-            System.out.println("Could not find loan for item " + itemBarcode);
+            System.out.println("Item " + itemBarcode + " is not on loan.");
         }
     }
 
     // Displays info about all the loans
     private static void viewLoans() {
+        // Runs if there are no loans
+        if (loans.length < 1) {
+            // Tells the user there are no loans on file
+            System.out.println("No items are currently on loan.");
+            // Exits the method
+            return;
+        }
+
         // Tells the user how many loans are on file
         System.out.println("There are " + loans.length + " loans on file:");
         // Runs for each loan
         for (Loan loan : loans) {
-            // Displays info about the loan
-            // TODO change to displayInfo() when method is implemented
-            loan.displayItem();
+            // Trys to wait for half a second for better ux
+            try {
+                Thread.sleep(500);
+            } // Handles interupts
+            catch (InterruptedException e) {
+                // Tells the user the sleep was interrupted
+                System.out.println("Continuing...");
+            } finally {
+                // Displays info about the loan
+                // TODO change to displayInfo() when method is implemented
+                loan.displayItem();
+            }
         }
     }
 
@@ -458,8 +508,17 @@ public class LibrarySystem {
         System.out.println("There are " + items.length + " items on file:");
         // Runs for each item
         for (Item item : items) {
-            // Displays info about the item
-            item.displayItem();
+            // Trys to wait for half a second for better ux
+            try {
+                Thread.sleep(500);
+            } // Handles interupts
+            catch (InterruptedException e) {
+                // Tells the user the sleep was interrupted
+                System.out.println("Continuing...");
+            } finally {
+                // Displays info about the item
+                item.displayItem();
+            }
         }
     }
 
@@ -480,6 +539,9 @@ public class LibrarySystem {
                 + "perform...");
         // Gets the option the user wants to run
         response = input.nextLine();
+
+        // Outputs an empty line for better formating
+        System.out.println();
 
         // Runs code depending on the response, taking only the first character
         switch (response.substring(0, 1)) {
@@ -514,8 +576,17 @@ public class LibrarySystem {
                         + " of the function you wish to perform.");
         }
 
-        // Returns true to run again
-        return true;
+        // Trys to wait 1 second for better ux
+        try {
+            Thread.sleep(1000);
+        } // Handles interupts
+        catch (InterruptedException e) {
+            // Tells the user the sleep was interrupted
+            System.out.println("Continuing...");
+        } finally {
+            // Returns true to run again
+            return true;
+        }
     }
 
     // Opens the file to write to, creating it if it doesn't exist
@@ -549,7 +620,7 @@ public class LibrarySystem {
         } while (running);
 
         // Tells the user the program is exiting
-        System.out.println("\nThank you for using the Library System, "
+        System.out.println("Thank you for using the Library System, "
                 + "goodbye!");
     }
 
