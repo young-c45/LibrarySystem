@@ -280,7 +280,7 @@ public class LibrarySystem {
         // Runs for each loan in loans
         for (Loan loan : loans) {
             // Returns the loan if the item barcode is the provided barcode
-            // TODO loan .getBarcode method when coded
+            // TODO loan .getBarcode method when implemented
             if (loan.getUserID().equals(barcode)) {
                 return loan;
             }
