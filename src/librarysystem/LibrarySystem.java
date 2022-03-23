@@ -402,9 +402,9 @@ public class LibrarySystem {
         } // Handles exceptions
         catch (Exception e) {
             switch (e.getMessage()) {
-                // Runs if the item cannot be found
-                case "No Item":
-                    System.out.println("Could not find item for barcode "
+                // Runs if the loan cannot be found
+                case "No Loan":
+                    System.out.println("Could not find loan for barcode "
                             + itemBarcode);
                     break;
                 // Runs if the item cannot be renewed more
@@ -464,8 +464,58 @@ public class LibrarySystem {
     }
 
     // Runs the method for the function the user wants to run
-    private static void runOperation() {
+    private static boolean runOperation() {
+        // Declares the local variables
+        String response;
 
+        // Tells the user of the options
+        System.out.println("\nWelcome to the Library System! This program can:"
+                + "\n\t1. Issue a new loan of an item to a user"
+                + "\n\t2. Renew the current loan of an item"
+                + "\n\t3. Return an item"
+                + "\n\t4. View information about all the currently active loans"
+                + "\n\t5. View information about all the items in the library"
+                + "\n\t6. Exit the program"
+                + "\nPlease enter the number of the function you wish to "
+                + "perform...");
+        // Gets the option the user wants to run
+        response = input.nextLine();
+
+        // Runs code depending on the response, taking only the first character
+        switch (response.substring(0, 1)) {
+            // Runs for option 1
+            case "1":
+                issueItem();
+                break;
+            // Runs for option 2
+            case "2":
+                renewItem();
+                break;
+            // Runs for option 3
+            case "3":
+                returnItem();
+                break;
+            // Runs for option 4
+            case "4":
+                viewLoans();
+                break;
+            // Runs for option 5
+            case "5":
+                viewItems();
+                break;
+            // Runs for option 6
+            case "6":
+                // Returns false to not run again
+                return false;
+            // Runs for any other input
+            default:
+                // Tells the user the input is invalid
+                System.out.println("Invalid input, please only enter the number"
+                        + " of the function you wish to perform.");
+        }
+
+        // Returns true to run again
+        return true;
     }
 
     // Opens the file to write to, creating it if it doesn't exist
@@ -486,8 +536,21 @@ public class LibrarySystem {
 
     // Runs when the class is compiled
     public static void main(String[] args) {
+        // Declares the local variables
+        boolean running;
+
         // Reads in the files
         readFiles();
+
+        // Runs until runOperation() returns false
+        do {
+            // Runs runOperation and stores the returned value
+            running = runOperation();
+        } while (running);
+
+        // Tells the user the program is exiting
+        System.out.println("\nThank you for using the Library System, "
+                + "goodbye!");
     }
 
 }
