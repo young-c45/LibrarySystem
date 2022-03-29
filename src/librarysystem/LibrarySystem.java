@@ -323,10 +323,6 @@ public class LibrarySystem {
                 // Stores the new loans array in loans
                 loans = newLoans;
 
-                // Tells the user the loan was removed
-                System.out.println("Successfully returned item "
-                        + barcode + ".");
-
                 // Exits the method
                 return;
             }
@@ -461,7 +457,8 @@ public class LibrarySystem {
             // Removes the loan from the items array
             removeLoan(itemBarcode);
             // Tells the user the loan was removed
-            System.out.println("Successfully returned item " + itemBarcode);
+            System.out.println("Successfully returned item "
+                    + itemBarcode + ".");
         } // Handles exceptions
         catch (Exception e) {
             // Tells the user the loan couldn't be found
