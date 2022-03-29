@@ -379,8 +379,7 @@ public class LibrarySystem {
             // Tells the user the loan was issued
             System.out.println("Successfully issued loan:");
             // Outputs the information of the new loan
-            // TODO change to displayInfo method when implemented
-            loan.displayItem();
+            loan.displayInfo();
         } // Handles exceptions
         catch (Exception e) {
             switch (e.getMessage()) {
@@ -424,8 +423,7 @@ public class LibrarySystem {
             // Tells the user the loan was updated
             System.out.println("Successfully renewed loan:");
             // Outputs updated information about the loan
-            // TODO change to displayInfo() when method is implemented
-            loan.displayItem();
+            loan.displayInfo();
         } // Handles exceptions
         catch (Exception e) {
             switch (e.getMessage()) {
@@ -494,8 +492,7 @@ public class LibrarySystem {
                 System.out.println("Continuing...");
             } finally {
                 // Displays info about the loan
-                // TODO change to displayInfo() when method is implemented
-                loan.displayItem();
+                loan.displayInfo();
             }
         }
     }
