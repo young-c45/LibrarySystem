@@ -479,6 +479,9 @@ public class LibrarySystem {
             return;
         }
 
+        // Creates an integer to store the number of iterations
+        int i = 1;
+
         // Tells the user how many loans are on file
         System.out.println("There are " + loans.length + " loans on file:");
         // Runs for each loan
@@ -491,14 +494,23 @@ public class LibrarySystem {
                 // Tells the user the sleep was interrupted
                 System.out.println("Continuing...");
             } finally {
+                // Outputs a header for better formating
+                System.out.println("-----------------Loan " + i
+                        + "-----------------");
                 // Displays info about the loan
                 loan.displayInfo();
+                // Increments i
+                i++;
+                // Outputs an empty line for better formating
+                System.out.println();
             }
         }
     }
 
     // Displays info about all the items
     private static void viewItems() {
+        // Creates an integer to store the number of iterations
+        int i = 1;
         // Tells the user how many items are on file
         System.out.println("There are " + items.length + " items on file:");
         // Runs for each item
@@ -511,8 +523,15 @@ public class LibrarySystem {
                 // Tells the user the sleep was interrupted
                 System.out.println("Continuing...");
             } finally {
+                // Outputs a header for better formating
+                System.out.println("-----------------Item " + i
+                        + "-----------------");
                 // Displays info about the item
                 item.displayItem();
+                // Increments i
+                i++;
+                // Outputs an empty line for better formating
+                System.out.println();
             }
         }
     }
