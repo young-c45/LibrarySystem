@@ -33,12 +33,17 @@ public class Loan {
    
    }
    
-    public void displayItem(){
-      System.out.println("Displayed Item");
+    public void displayInfo(){
+      System.out.println("\tLoaned Item Barcode: " + item.getBarcode());
+      System.out.println("\tLoanee User ID: " + user.getUserID());
+      System.out.println("\tIssue Date: " + issueDate);
+      System.out.println("\tDue Date: " +dueDate );
+      System.out.println("\tNumber of Renewals: " + numberOfRenewals );
+    
     }
     
-     public void displayUser(){
-      System.out.println("Displayed User");
-     }
+    
+    
+     
    
 }
