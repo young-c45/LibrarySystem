@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Scanner;
 
@@ -160,7 +161,10 @@ public class LibrarySystem {
                 // Creates a loan from the line and adds it to the loans array
                 appendToArray(new Loan(item, user, fileScan.next(),
                         fileScan.next(), fileScan.nextInt()));
-            } // Handles exceptions
+            } // Catches invalid dates
+            catch (ParseException e) {
+                System.out.println("Could not understand date for loan.");
+            }// Handles other exceptions
             catch (Exception e) {
                 switch (e.getMessage()) {
                     // Runs if the item could not be found
@@ -176,7 +180,7 @@ public class LibrarySystem {
                     // Runs for any other exception
                     default:
                         System.out.println("Encountered error while reading "
-                                + "item.");
+                                + "loan.");
                         break;
                 }
             }
