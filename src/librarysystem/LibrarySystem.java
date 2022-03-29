@@ -158,8 +158,7 @@ public class LibrarySystem {
                 user = getUser(userID);
 
                 // Creates a loan from the line and adds it to the loans array
-                // TODO change to using item and user when constructor is fixed
-                appendToArray(new Loan(itemBarcode, userID, fileScan.next(),
+                appendToArray(new Loan(item, user, fileScan.next(),
                         fileScan.next(), fileScan.nextInt()));
             } // Handles exceptions
             catch (Exception e) {
@@ -280,8 +279,7 @@ public class LibrarySystem {
         // Runs for each loan in loans
         for (Loan loan : loans) {
             // Returns the loan if the item barcode is the provided barcode
-            // TODO loan .getBarcode method when implemented
-            if (loan.getUserID().equals(barcode)) {
+            if (loan.getBarcode().equals(barcode)) {
                 return loan;
             }
         }
@@ -294,8 +292,7 @@ public class LibrarySystem {
         // Runs for each loan in loans
         for (Loan loan : loans) {
             // Returns true if the item barcode is the provided barcode
-            // TODO loan .getBarcode method when coded
-            if (loan.getUserID().equals(barcode)) {
+            if (loan.getBarcode().equals(barcode)) {
                 return true;
             }
         }
@@ -313,8 +310,7 @@ public class LibrarySystem {
         // Runs for each loan in loans
         for (int i = 0; i < loans.length; i++) {
             // Runs if the loan item's barcode is the provided barcode
-            // TODO loan .getBarcode method when coded
-            if (loans[i].getUserID().equals(barcode)) {
+            if (loans[i].getBarcode().equals(barcode)) {
                 // Runs for each loan in loans
                 for (int j = 0; j < loans.length; j++) {
                     // Runs if j is not the index of the removed loan (i)
@@ -376,7 +372,7 @@ public class LibrarySystem {
             // Creates the loan from the inputs
             // TODO change to only passing item and user when constructor is
             //      implemented
-            loan = new Loan(itemBarcode, userID, "", "", 0);
+            loan = new Loan(item, user, "", "", 0);
             // Adds the loan to the loans array
             appendToArray(loan);
 
