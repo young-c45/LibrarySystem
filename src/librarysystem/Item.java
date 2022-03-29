@@ -28,6 +28,10 @@ public class Item {
         return barcode;
     }
 
+    public String getType() {
+        return type;
+    }
+
     public void displayItem() {
         System.out.println("\tItem Barcode: " + barcode);
         System.out.println("\tAuthor: " + author);

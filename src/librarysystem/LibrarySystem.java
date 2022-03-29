@@ -370,9 +370,7 @@ public class LibrarySystem {
             user = getUser(userID);
 
             // Creates the loan from the inputs
-            // TODO change to only passing item and user when constructor is
-            //      implemented
-            loan = new Loan(item, user, "", "", 0);
+            loan = new Loan(item, user);
             // Adds the loan to the loans array
             appendToArray(loan);
 
