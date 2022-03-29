@@ -555,8 +555,8 @@ public class LibrarySystem {
         // Outputs an empty line for better formating
         System.out.println();
 
-        // Runs code depending on the response, taking only the first character
-        switch (response.substring(0, 1)) {
+        // Runs code depending on the response
+        switch (response) {
             // Runs for option 1
             case "1":
                 issueItem();

@@ -2,3 +2,4 @@ target/
 nbproject/private/
 build/
 LOANS.csv
+/dist/
