@@ -682,8 +682,7 @@ public class LibrarySystem {
         } while (running);
 
         // Saves the loans array to a file
-        // TODO remove "../" when finished testing
-        writeLoans("../" + loansFilePath);
+        writeLoans(loansFilePath);
 
         // Tells the user the program is exiting
         System.out.println("Thank you for using the Library System, "
