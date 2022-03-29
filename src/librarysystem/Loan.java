@@ -9,13 +9,13 @@ package librarysystem;
 
 public class Loan {
     
- private String item ;
- private String user ;
+ private Item item ;
+ private User user ;
  private String issueDate ;
  private String dueDate ;
  private int numberOfRenewals ;
  
-  public Loan(String newItem, String newUser, String newIssueDate, String newDueDate, int newNumberOfRenewals){
+  public Loan(Item newItem, User newUser, String newIssueDate, String newDueDate, int newNumberOfRenewals){
       item = newItem;
       user = newUser;
       issueDate = newIssueDate;
@@ -23,10 +23,14 @@ public class Loan {
       numberOfRenewals = newNumberOfRenewals;
   }
    public String getUserID(){
-       return user;
+       return user.getUserID();
    }
    public String getReturnDate(){
        return dueDate;
+   }
+   public String getBarcode(){
+       return item.getBarcode();
+   
    }
    
     public void displayItem(){
