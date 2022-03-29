@@ -416,8 +416,7 @@ public class LibrarySystem {
             loan = getLoan(itemBarcode);
 
             // Renews the loan
-            // TODO uncomment when renew() method is implemented
-            //loan.renew();
+            loan.renew();
             // Tells the user the loan was updated
             System.out.println("Successfully renewed loan:");
             // Outputs updated information about the loan
@@ -432,9 +431,9 @@ public class LibrarySystem {
                     break;
                 // Runs if the item cannot be renewed more
                 case "Max Renewals Reached":
-                    System.out.println("This loan has already been renewed the "
-                            + "maximum number of times, so cannot be renewed "
-                            + "again.");
+                    System.out.println("This loan has been exceeded it's "
+                            + "renewal quota, so cannot be renewed again.");
+                    break;
                 // Runs for any other exception
                 default:
                     System.out.println("Encountered error while "

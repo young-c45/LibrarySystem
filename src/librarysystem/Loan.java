@@ -23,6 +23,8 @@ public class Loan {
     private Date dueDate;
     private int numberOfRenewals;
 
+    private int maxRenews;
+
     public Loan(Item newItem, User newUser, String newIssueDate,
             String newDueDate, int newNumberOfRenewals) throws ParseException {
         item = newItem;
@@ -30,6 +32,7 @@ public class Loan {
         issueDate = fileDateFormatter.parse(newIssueDate);
         dueDate = fileDateFormatter.parse(newDueDate);
         numberOfRenewals = newNumberOfRenewals;
+        maxRenews = item.getType().equals("Book") ? 3 : 2;
     }
 
     public Loan(Item newItem, User newUser) {
@@ -39,6 +42,7 @@ public class Loan {
         dueDate = new Date();
         setReturnDate(false);
         numberOfRenewals = 0;
+        maxRenews = item.getType().equals("Book") ? 3 : 2;
     }
 
     private String getReadableDate(Date date) {
@@ -83,6 +87,15 @@ public class Loan {
         System.out.println("\tIssue Date: " + getReadableDate(issueDate));
         System.out.println("\tDue Date: " + getReadableDate(dueDate));
         System.out.println("\tNumber of Renewals: " + numberOfRenewals);
+    }
+
+    public void renew() throws Exception {
+        if (numberOfRenewals >= maxRenews) {
+            throw new Exception("Max Renewals Reached");
+        }
+
+        setReturnDate(true);
+        numberOfRenewals++;
     }
 
     private void setReturnDate(boolean renew) {
