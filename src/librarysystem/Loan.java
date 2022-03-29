@@ -114,4 +114,10 @@ public class Loan {
         dueDate = calendar.getTime();
     }
 
+    public String toString() {
+        return item.getBarcode() + "," + user.getUserID() + ","
+                + fileDateFormatter.format(issueDate) + ","
+                + fileDateFormatter.format(dueDate) + "," + numberOfRenewals;
+    }
+
 }
