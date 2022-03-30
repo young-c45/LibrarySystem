@@ -17,25 +17,39 @@ import java.util.Scanner;
 public class LibrarySystem {
 
     // Declares the library object arrays
-    private static User[] users = new User[0];
-    private static Item[] items = new Item[0];
-    private static Loan[] loans = new Loan[0];
+    private User[] users;
+    private Item[] items;
+    private Loan[] loans;
 
     // Declares the scanners
     private static Scanner input = new Scanner(System.in);
-    private static Scanner fileScan;
+    private Scanner fileScan;
 
     // Declares the file writer
-    private static PrintWriter writer;
+    private PrintWriter writer;
 
     // Sets the paths to the storage files
-    private static String usersFilePath = "USERS.csv";
-    private static String itemsFilePath = "ITEMS.csv";
-    private static String loansFilePath = "LOANS.csv";
-    private static String loansBackupPath = "LOANS_BACKUP.csv";
+    private String usersFilePath;
+    private String itemsFilePath;
+    private String loansFilePath;
+    private String loansBackupPath;
+
+    // Creates the LibrarySystem object
+    public LibrarySystem(String usersPath, String itemsPath, String loansPath)
+            throws Exception {
+        // Sets the paths for the files
+        usersFilePath = usersPath + ".csv";
+        itemsFilePath = itemsPath + ".csv";
+        loansFilePath = loansPath + ".csv";
+        // Creates a backup path for the loans incase of a write error
+        loansBackupPath = loansPath + "_BACKUP.csv";
+
+        // Loads the data in the files, inlcuding loans
+        loadFiles(true);
+    }
 
     // Adds a new User to the users array
-    private static void appendToArray(User newUser) {
+    public void appendToArray(User newUser) {
         // Clones users into a new array of 1 element larger size
         User[] newUsers = Arrays.copyOf(users, users.length + 1);
         // Adds the new user to the end of the new array
@@ -45,7 +59,7 @@ public class LibrarySystem {
     }
 
     // Adds a new Item to the items array
-    private static void appendToArray(Item newItem) {
+    public void appendToArray(Item newItem) {
         // Clones items into a new array of 1 element larger size
         Item[] newItems = Arrays.copyOf(items, items.length + 1);
         // Adds the new item to the end of the new array
@@ -55,7 +69,7 @@ public class LibrarySystem {
     }
 
     // Adds a new Loan to the loans array
-    private static void appendToArray(Loan newLoan) {
+    public void appendToArray(Loan newLoan) {
         // Clones loans into a new array of 1 element larger size
         Loan[] newLoans = Arrays.copyOf(loans, loans.length + 1);
         // Adds the new loan to the end of the new array
@@ -65,7 +79,7 @@ public class LibrarySystem {
     }
 
     // Opens the file scanner to the provide path
-    private static void setReadingFile(String path)
+    private void setReadingFile(String path)
             throws FileNotFoundException {
         // Opens the file scanner to the path
         fileScan = new Scanner(new File(path));
@@ -76,7 +90,10 @@ public class LibrarySystem {
     }
 
     // Adds all the users in file to the users array
-    private static void readUsers() throws FileNotFoundException, Exception {
+    private void readUsers() throws FileNotFoundException, Exception {
+        // Creates an empty array for users
+        users = new User[0];
+
         // Opens the users file to read
         setReadingFile(usersFilePath);
 
@@ -100,7 +117,10 @@ public class LibrarySystem {
     }
 
     // Adds all the items in file to the items array
-    private static void readItems() throws FileNotFoundException, Exception {
+    private void readItems() throws FileNotFoundException, Exception {
+        // Creates an empty array for items
+        items = new Item[0];
+
         // Opens the items file to read
         setReadingFile(itemsFilePath);
 
@@ -125,7 +145,10 @@ public class LibrarySystem {
     }
 
     // Adds all the loans in file to the loans array
-    private static void readLoans() throws FileNotFoundException, Exception {
+    private void readLoans() throws FileNotFoundException, Exception {
+        // Creates an empty array for loans
+        loans = new Loan[0];
+
         // Declares the local variables
         String itemBarcode = "", userID = "";
         Item item;
@@ -198,25 +221,23 @@ public class LibrarySystem {
         }
     }
 
-    // Stores all the information in the files in the arrays
-    private static void readFiles() {
+    // Stores all the information from the files in the arrays
+    public final void loadFiles(boolean includeLoans) throws Exception {
         // Trys to get all the stored users
         try {
             readUsers();
         } // Runs if no file was found
         catch (FileNotFoundException e) {
             // Tells the user
-            System.out.println("ERROR - Could not find users file, "
-                    + "ending program.");
-            // Ends to program
-            System.exit(1);
+            System.out.println("ERROR - Could not find users file.");
+            // Throws an exception
+            throw new Exception("Error Reading Users");
         } // Runs for any other exception
         catch (Exception e) {
             // Tells the user
-            System.out.println("ERROR - No users found in file, "
-                    + "ending program.");
-            // Ends to program
-            System.exit(1);
+            System.out.println("ERROR - No users found in file.");
+            // Throws an exception
+            throw new Exception("Error Reading Users");
         }
 
         // Trys to get all the stored items
@@ -225,35 +246,36 @@ public class LibrarySystem {
         } // Runs if no file was found
         catch (FileNotFoundException e) {
             // Tells the user
-            System.out.println("ERROR - Could not find items file, "
-                    + "ending program");
-            // Ends to program
-            System.exit(2);
+            System.out.println("ERROR - Could not find items file.");
+            // Throws an exception
+            throw new Exception("Error Reading Items");
         } // Runs for any other exception
         catch (Exception e) {
             // Tells the user
-            System.out.println("ERROR - No items found in file, "
-                    + "ending program.");
-            // Ends to program
-            System.exit(2);
+            System.out.println("ERROR - No items found in file.");
+            // Throws an exception
+            throw new Exception("Error Reading Items");
         }
 
-        // Trys to get all the stored loans
-        try {
-            readLoans();
-        } // Runs if no file was found
-        catch (FileNotFoundException e) {
-            // Tells the user
-            System.out.println("Could not find loans file.");
-        } // Runs for any other exception
-        catch (Exception e) {
-            // Tells the user
-            System.out.println("No loans found in file.");
+        // Runs if the method should load the loans
+        if (includeLoans) {
+            // Trys to get all the stored loans
+            try {
+                readLoans();
+            } // Runs if no file was found
+            catch (FileNotFoundException e) {
+                // Tells the user
+                System.out.println("Could not find loans file.");
+            } // Runs for any other exception
+            catch (Exception e) {
+                // Tells the user
+                System.out.println("No loans found in file.");
+            }
         }
     }
 
     // Gets the item from the items array
-    private static Item getItem(String barcode) throws Exception {
+    public Item getItem(String barcode) throws Exception {
         // Runs for each item in items
         for (Item item : items) {
             // Returns the item if it has the provided barcode
@@ -266,7 +288,7 @@ public class LibrarySystem {
     }
 
     // Gets the user from the users array
-    private static User getUser(String userID) throws Exception {
+    public User getUser(String userID) throws Exception {
         // Runs for each user in users
         for (User user : users) {
             // Returns user if it has the provided id
@@ -279,7 +301,7 @@ public class LibrarySystem {
     }
 
     // Gets the loan from the loans array
-    private static Loan getLoan(String barcode) throws Exception {
+    public Loan getLoan(String barcode) throws Exception {
         // Runs for each loan in loans
         for (Loan loan : loans) {
             // Returns the loan if the item barcode is the provided barcode
@@ -292,7 +314,7 @@ public class LibrarySystem {
     }
 
     // Checks if the loan is in the loans array
-    private static boolean hasLoan(String barcode) {
+    public boolean hasLoan(String barcode) {
         // Runs for each loan in loans
         for (Loan loan : loans) {
             // Returns true if the item barcode is the provided barcode
@@ -305,7 +327,7 @@ public class LibrarySystem {
     }
 
     // Removes the loan from the loans array
-    private static void removeLoan(String barcode) throws Exception {
+    public void removeLoan(String barcode) throws Exception {
         // Creates a new loans array with 1 less element than loans
         Loan[] newLoans = new Loan[loans.length - 1];
         // Declares the variable to store the index for newLoans
@@ -336,7 +358,7 @@ public class LibrarySystem {
     }
 
     // Creates and adds a new loan object to the loans array
-    private static void issueItem() {
+    public void issueItem() {
         // Declares the local variables
         String itemBarcode = "", userID = "";
         Item item;
@@ -400,7 +422,7 @@ public class LibrarySystem {
     }
 
     // Gets and renews a loan
-    private static void renewItem() {
+    public void renewItem() {
         // Declares the local variables
         String itemBarcode = "";
         Loan loan;
@@ -444,7 +466,7 @@ public class LibrarySystem {
     }
 
     // Gets and removes a loan from the loans array
-    private static void returnItem() {
+    public void returnItem() {
         // Declares the local variables
         String itemBarcode = "";
 
@@ -468,7 +490,7 @@ public class LibrarySystem {
     }
 
     // Displays info about all the loans
-    private static void viewLoans() {
+    public void viewLoans() {
         // Runs if there are no loans
         if (loans.length < 1) {
             // Tells the user there are no loans on file
@@ -506,7 +528,7 @@ public class LibrarySystem {
     }
 
     // Displays info about all the items
-    private static void viewItems() {
+    public void viewItems() {
         // Creates an integer to store the number of iterations
         int i = 1;
         // Tells the user how many items are on file
@@ -535,7 +557,7 @@ public class LibrarySystem {
     }
 
     // Runs the method for the function the user wants to run
-    private static boolean runOperation() {
+    public boolean runOperation() {
         // Declares the local variables
         String response;
 
@@ -602,7 +624,7 @@ public class LibrarySystem {
     }
 
     // Opens the file to write to, creating it if it doesn't exist
-    private static void openWriter(String path)
+    private void openWriter(String path)
             throws SecurityException, IOException {
         // Opens the file at path
         File outputFile = new File(path);
@@ -613,7 +635,7 @@ public class LibrarySystem {
     }
 
     // Writes all the loans to the opened file
-    private static void storeLoans() {
+    private void storeLoans() {
         // Writers the field descriptions to the file
         writer.println("Barcode,User_id,Issue_Date,Due_Date,numRenews");
         // Runs for each loan in the loans array
@@ -624,7 +646,7 @@ public class LibrarySystem {
     }
 
     // Opens a file and writes all the loans out to the file
-    private static void writeLoans(String path) {
+    public void writeLoans(String path) {
         // Sets the backup path
         String backupPath = System.getProperty("user.home")
                 + System.currentTimeMillis() + loansBackupPath;
@@ -667,26 +689,57 @@ public class LibrarySystem {
         }
     }
 
+    // Stores the loans array in the loans file
+    public void saveLoans() {
+        // Writes all the loans to loansFilePath
+        writeLoans(loansFilePath);
+    }
+
     // Runs when the class is compiled
     public static void main(String[] args) {
         // Declares the local variables
         boolean running;
+        // Declares the LibrarySystem object
+        LibrarySystem library;
 
-        // Reads in the files
-        readFiles();
+        // Trys to create the Library System object
+        try {
+            // Declares and creates the Library System object
+            library = new LibrarySystem("USERS", "ITEMS", "LOANS");
 
-        // Runs until runOperation() returns false
-        do {
-            // Runs runOperation and stores the returned value
-            running = runOperation();
-        } while (running);
+            // Runs until runOperation() returns false
+            do {
+                // Runs runOperation and stores the returned value
+                running = library.runOperation();
+            } while (running);
 
-        // Saves the loans array to a file
-        writeLoans(loansFilePath);
+            // Saves the loans array
+            library.saveLoans();
 
-        // Tells the user the program is exiting
-        System.out.println("Thank you for using the Library System, "
-                + "goodbye!");
+            // Tells the user the program is exiting
+            System.out.println("Thank you for using the Library System, "
+                    + "goodbye!");
+        } // Catches Exceptions
+        catch (Exception e) {
+            // Runs depending the exception message
+            switch (e.getMessage()) {
+                // Exits program with code 2 for reading users error
+                case "Error Reading Users":
+                    System.exit(2);
+                    break;
+                // Exits program with code 3 for reading items error
+                case "Error Reading Items":
+                    System.exit(3);
+                    break;
+                // Runs for any other error
+                default:
+                    // Tells the user there was an error
+                    System.out.println("ERROR - Could not create Library System"
+                            + " object.");
+                    // Exits program with code 1
+                    System.exit(1);
+            }
+        }
     }
 
 }
