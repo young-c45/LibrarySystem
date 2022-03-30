@@ -8,6 +8,7 @@ package librarysystem;
 
 public class Item {
 
+    // Declares instance variables
     private String barcode;
     private String author;
     private String title;
@@ -15,7 +16,10 @@ public class Item {
     private String year;
     private String isbn;
 
-    public Item(String newBarcode, String newAuthor, String newTitle, String newType, String newYear, String newIsbn) {
+    // Creates the object
+    public Item(String newBarcode, String newAuthor, String newTitle,
+            String newType, String newYear, String newIsbn) {
+        // Initialises the variables to those passed to the constructor
         barcode = newBarcode;
         author = newAuthor;
         title = newTitle;
@@ -24,14 +28,17 @@ public class Item {
         isbn = newIsbn;
     }
 
+    // Returns the item's barcode
     public String getBarcode() {
         return barcode;
     }
 
+    // Returns the item's item type
     public String getType() {
         return type;
     }
 
+    // Outputs the item's information to the standard output stream
     public void displayItem() {
         System.out.println("\tItem Barcode: " + barcode);
         System.out.println("\tAuthor: " + author);
